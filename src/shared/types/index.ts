@@ -29,3 +29,9 @@ export interface WorkloadMetrics {
   isChronicUnstable: boolean;
   weeklyLoads: number[];
 }
+
+export interface PaginatedSessionsResponse {
+  sessions: Session[];
+  nextCursor: number | null;
+  hasMore: boolean;
+}

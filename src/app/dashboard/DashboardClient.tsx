@@ -1,21 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import type { TrainingStatus, SessionType, Session } from "@/shared/types";
 import type { WeeklyLoadRange } from "@/shared/lib/workload";
+import { getISOWeekKey, getWeekBounds } from "@/shared/lib/week";
 import { StatusBadge } from "@/shared/ui/StatusBadge";
 import { MetricCard } from "@/shared/ui/MetricCard";
 import { AcwrGauge } from "@/shared/ui/AcwrGauge";
 import { Tooltip } from "@/shared/ui/Tooltip";
 import { ConfirmModal } from "@/shared/ui/ConfirmModal";
 import { WeeklyLoadChart } from "@/widgets/dashboard";
-import { SessionCard } from "@/entities/session";
+import { SessionCard, WeekDivider } from "@/entities/session";
 import { SessionModal } from "@/features/session-management";
 import { FloatingActionButton } from "@/shared/ui/FloatingActionButton";
+import { useWeekSessionSync } from "@/features/week-navigation";
+import { useSessionPagination } from "@/features/session-pagination";
 
 interface DashboardClientProps {
   sessions: Session[];
+  hasMore: boolean;
+  nextCursor: number | null;
   acuteLoad: number;
   chronicLoad: number;
   acwr: number | null;
@@ -25,8 +30,39 @@ interface DashboardClientProps {
   isChronicUnstable: boolean;
 }
 
+interface WeekGroup {
+  weekKey: string;
+  startDate: string;
+  endDate: string;
+  sessions: Session[];
+}
+
+function groupSessionsByWeek(sessions: Session[]): WeekGroup[] {
+  const groups: WeekGroup[] = [];
+  let currentGroup: WeekGroup | null = null;
+
+  for (const session of sessions) {
+    const weekKey = getISOWeekKey(session.date);
+    if (!currentGroup || currentGroup.weekKey !== weekKey) {
+      const bounds = getWeekBounds(weekKey);
+      currentGroup = {
+        weekKey,
+        startDate: bounds.start.toISOString(),
+        endDate: bounds.end.toISOString(),
+        sessions: [],
+      };
+      groups.push(currentGroup);
+    }
+    currentGroup.sessions.push(session);
+  }
+
+  return groups;
+}
+
 export function DashboardClient({
-  sessions,
+  sessions: initialSessions,
+  hasMore: initialHasMore,
+  nextCursor: initialNextCursor,
   acuteLoad,
   chronicLoad,
   acwr,
@@ -46,6 +82,20 @@ export function DashboardClient({
     notes: string | null;
   } | null>(null);
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
+
+  const sessionListRef = useRef<HTMLDivElement>(null);
+
+  const { sessions, isLoading, sentinelRef } = useSessionPagination({
+    initialSessions,
+    initialNextCursor,
+    initialHasMore,
+  });
+
+  const { activeWeekKey, scrollToWeek } = useWeekSessionSync({
+    containerRef: sessionListRef,
+  });
+
+  const weekGroups = useMemo(() => groupSessionsByWeek(sessions), [sessions]);
 
   const handleEdit = (id: number) => {
     const session = sessions.find((s) => s.id === id);
@@ -81,6 +131,10 @@ export function DashboardClient({
   const handleOpenCreate = () => {
     setEditSession(null);
     setModalOpen(true);
+  };
+
+  const handleWeekClick = (weekKey: string) => {
+    scrollToWeek(weekKey);
   };
 
   const acwrDisplay = acwr !== null ? acwr.toFixed(2) : "—";
@@ -136,7 +190,11 @@ export function DashboardClient({
       {/* Two-Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 lg:sticky lg:top-[calc(4rem+1px+theme(spacing.8)+200px)] lg:self-start">
-          <WeeklyLoadChart weeklyLoadRanges={weeklyLoadRanges} />
+          <WeeklyLoadChart
+            weeklyLoadRanges={weeklyLoadRanges}
+            activeWeekKey={activeWeekKey ?? undefined}
+            onWeekClick={handleWeekClick}
+          />
         </div>
 
         <div className="lg:col-span-2 space-y-6">
@@ -157,19 +215,39 @@ export function DashboardClient({
               </p>
             </div>
           ) : (
-            <div className="space-y-4">
-              {sessions.map((session) => (
-                <SessionCard
-                  key={session.id}
-                  id={session.id}
-                  date={session.date}
-                  type={session.type}
-                  duration={session.duration}
-                  rpe={session.rpe}
-                  onEdit={handleEdit}
-                  onDelete={handleDeleteRequest}
-                />
+            <div
+              ref={sessionListRef}
+              className="overflow-y-auto max-h-[calc(100vh-16rem)] space-y-4 pr-1"
+            >
+              {weekGroups.map((group) => (
+                <div key={group.weekKey}>
+                  <WeekDivider
+                    weekKey={group.weekKey}
+                    startDate={group.startDate}
+                    endDate={group.endDate}
+                  />
+                  <div className="space-y-4 mt-2">
+                    {group.sessions.map((session) => (
+                      <SessionCard
+                        key={session.id}
+                        id={session.id}
+                        date={session.date}
+                        type={session.type}
+                        duration={session.duration}
+                        rpe={session.rpe}
+                        onEdit={handleEdit}
+                        onDelete={handleDeleteRequest}
+                      />
+                    ))}
+                  </div>
+                </div>
               ))}
+              {isLoading && (
+                <div className="flex justify-center py-4">
+                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                </div>
+              )}
+              <div ref={sentinelRef} className="h-1" />
             </div>
           )}
         </div>
