@@ -1,4 +1,4 @@
-import type { TrainingStatus } from "@/lib/types";
+import type { TrainingStatus } from "@/shared/types";
 
 const STATUS_CONFIG: Record<
   TrainingStatus,

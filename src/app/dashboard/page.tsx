@@ -1,15 +1,15 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/shared/lib/prisma";
 import {
   computeAcuteLoad,
   computeChronicLoad,
   computeACWR,
   classifyStatus,
-  computeWeeklyLoads,
+  computeWeeklyLoadRanges,
   getDataSufficiencyFlags,
-} from "@/lib/workload";
-import { Navbar } from "@/ux/components/Navbar";
+} from "@/shared/lib/workload";
+import { Navbar } from "@/shared/ui/Navbar";
 import { DashboardClient } from "./DashboardClient";
-import type { SessionType } from "@/lib/types";
+import type { SessionType } from "@/shared/types";
 
 export const dynamic = "force-dynamic";
 
@@ -29,7 +29,7 @@ export default async function DashboardPage() {
   const chronicLoad = computeChronicLoad(sessionInputs, now);
   const acwr = computeACWR(acuteLoad, chronicLoad);
   const status = classifyStatus(acwr);
-  const weeklyLoads = computeWeeklyLoads(sessionInputs, now, 5);
+  const weeklyLoadRanges = computeWeeklyLoadRanges(sessionInputs, now, 5);
   const { isAcuteIncomplete, isChronicUnstable } = getDataSufficiencyFlags(
     sessionInputs,
     now,
@@ -55,7 +55,7 @@ export default async function DashboardPage() {
         chronicLoad={chronicLoad}
         acwr={acwr}
         status={status}
-        weeklyLoads={weeklyLoads}
+        weeklyLoadRanges={weeklyLoadRanges}
         isAcuteIncomplete={isAcuteIncomplete}
         isChronicUnstable={isChronicUnstable}
       />

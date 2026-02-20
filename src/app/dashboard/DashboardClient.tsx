@@ -2,14 +2,17 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import type { TrainingStatus, SessionType, Session } from "@/lib/types";
-import { StatusBadge } from "@/ux/components/StatusBadge";
-import { MetricCard } from "@/ux/components/MetricCard";
-import { AcwrGauge } from "@/ux/components/AcwrGauge";
-import { WeeklyLoadChart } from "@/ux/components/WeeklyLoadChart";
-import { SessionCard } from "@/ux/components/SessionCard";
-import { SessionModal } from "@/ux/components/SessionModal";
-import { FloatingActionButton } from "@/ux/components/FloatingActionButton";
+import type { TrainingStatus, SessionType, Session } from "@/shared/types";
+import type { WeeklyLoadRange } from "@/shared/lib/workload";
+import { StatusBadge } from "@/shared/ui/StatusBadge";
+import { MetricCard } from "@/shared/ui/MetricCard";
+import { AcwrGauge } from "@/shared/ui/AcwrGauge";
+import { Tooltip } from "@/shared/ui/Tooltip";
+import { ConfirmModal } from "@/shared/ui/ConfirmModal";
+import { WeeklyLoadChart } from "@/widgets/dashboard";
+import { SessionCard } from "@/entities/session";
+import { SessionModal } from "@/features/session-management";
+import { FloatingActionButton } from "@/shared/ui/FloatingActionButton";
 
 interface DashboardClientProps {
   sessions: Session[];
@@ -17,7 +20,7 @@ interface DashboardClientProps {
   chronicLoad: number;
   acwr: number | null;
   status: TrainingStatus;
-  weeklyLoads: number[];
+  weeklyLoadRanges: WeeklyLoadRange[];
   isAcuteIncomplete: boolean;
   isChronicUnstable: boolean;
 }
@@ -28,7 +31,7 @@ export function DashboardClient({
   chronicLoad,
   acwr,
   status,
-  weeklyLoads,
+  weeklyLoadRanges,
   isAcuteIncomplete,
   isChronicUnstable,
 }: DashboardClientProps) {
@@ -42,6 +45,7 @@ export function DashboardClient({
     rpe: number;
     notes: string | null;
   } | null>(null);
+  const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
 
   const handleEdit = (id: number) => {
     const session = sessions.find((s) => s.id === id);
@@ -58,9 +62,14 @@ export function DashboardClient({
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (!window.confirm("Are you sure you want to delete this session?")) return;
-    await fetch(`/api/sessions/${id}`, { method: "DELETE" });
+  const handleDeleteRequest = (id: number) => {
+    setDeleteTargetId(id);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (deleteTargetId === null) return;
+    await fetch(`/api/sessions/${deleteTargetId}`, { method: "DELETE" });
+    setDeleteTargetId(null);
     router.refresh();
   };
 
@@ -80,15 +89,17 @@ export function DashboardClient({
 
   return (
     <main className="max-w-6xl mx-auto p-4 md:p-8 space-y-8">
-      {/* Status Overview Panel */}
-      <section className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      {/* Status Overview Panel — sticky below navbar */}
+      <section className="bg-white rounded-xl shadow-sm border border-slate-200 sticky top-16 z-10 shadow-slate-200/60">
         <div className="p-6 md:p-8 flex flex-col md:flex-row items-center gap-8">
           <div className="flex-1 space-y-4 text-center md:text-left">
             <StatusBadge status={status} />
             <div>
-              <p className="text-slate-500 text-sm font-medium uppercase tracking-wider">
-                Current ACWR Ratio
-              </p>
+              <Tooltip content="Acute:Chronic Workload Ratio — compares your recent load to your longer-term average. Optimal range is 0.8–1.3.">
+                <p className="text-slate-500 text-sm font-medium uppercase tracking-wider cursor-help">
+                  Current ACWR Ratio
+                </p>
+              </Tooltip>
               <div className="flex items-baseline gap-2 justify-center md:justify-start">
                 <h2 className="text-6xl font-black text-primary">
                   {acwrDisplay}
@@ -108,12 +119,14 @@ export function DashboardClient({
               value={acuteLoad}
               subtitle="Last 7 days"
               warning={isAcuteIncomplete}
+              tooltip="Total training load (duration × RPE) from the last 7 days."
             />
             <MetricCard
               label="Chronic Load"
               value={Math.round(chronicLoad)}
               subtitle="Last 28 days avg"
               warning={isChronicUnstable}
+              tooltip="Average weekly training load over the last 28 days (4 weeks)."
             />
             <AcwrGauge acwr={acwr} />
           </div>
@@ -122,8 +135,8 @@ export function DashboardClient({
 
       {/* Two-Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-1 space-y-6">
-          <WeeklyLoadChart weeklyLoads={weeklyLoads} />
+        <div className="lg:col-span-1 lg:sticky lg:top-[calc(4rem+1px+theme(spacing.8)+200px)] lg:self-start">
+          <WeeklyLoadChart weeklyLoadRanges={weeklyLoadRanges} />
         </div>
 
         <div className="lg:col-span-2 space-y-6">
@@ -154,7 +167,7 @@ export function DashboardClient({
                   duration={session.duration}
                   rpe={session.rpe}
                   onEdit={handleEdit}
-                  onDelete={handleDelete}
+                  onDelete={handleDeleteRequest}
                 />
               ))}
             </div>
@@ -172,6 +185,14 @@ export function DashboardClient({
         }}
         onSaved={handleSaved}
         editSession={editSession}
+      />
+
+      <ConfirmModal
+        isOpen={deleteTargetId !== null}
+        onClose={() => setDeleteTargetId(null)}
+        onConfirm={handleDeleteConfirm}
+        title="Delete Session"
+        message="Are you sure you want to delete this session? This action cannot be undone."
       />
     </main>
   );

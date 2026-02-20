@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { validateSession } from "@/lib/validation";
+import { prisma } from "@/shared/lib/prisma";
+import { validateSession } from "@/shared/lib/validation";
 
 export async function GET() {
   const sessions = await prisma.session.findMany({

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { SessionType } from "@/lib/types";
-import { SESSION_TYPES } from "@/lib/types";
+import type { SessionType } from "@/shared/types";
+import { SESSION_TYPES } from "@/shared/types";
 
 interface SessionModalProps {
   isOpen: boolean;
@@ -170,7 +170,10 @@ export function SessionModal({
                 step="1"
                 value={rpe}
                 onChange={(e) => setRpe(Number(e.target.value))}
-                className="w-full h-2 bg-slate-200 rounded-full appearance-none cursor-pointer accent-primary"
+                className="w-full rpe-slider"
+                style={{
+                  background: `linear-gradient(to right, var(--color-primary) ${((rpe - 1) / 9) * 100}%, #e2e8f0 ${((rpe - 1) / 9) * 100}%)`,
+                }}
               />
               <div className="flex justify-between mt-2 text-[10px] text-slate-400 font-medium uppercase tracking-wider">
                 <span>Very Easy</span>

@@ -1,4 +1,4 @@
-import type { TrainingStatus } from "./types";
+import type { TrainingStatus } from "@/shared/types";
 
 export const ACUTE_WINDOW_DAYS = 7;
 export const CHRONIC_WINDOW_DAYS = 28;
@@ -117,6 +117,59 @@ export function computeWeeklyLoads(
   }
 
   return loads;
+}
+
+export interface WeeklyLoadRange {
+  load: number;
+  startDate: string;
+  endDate: string;
+}
+
+function getMondayOfWeek(d: Date): Date {
+  const result = new Date(d);
+  const day = result.getDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  result.setDate(result.getDate() + diff);
+  return startOfDay(result);
+}
+
+function getSundayOfWeek(d: Date): Date {
+  const monday = getMondayOfWeek(d);
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+  return startOfDay(sunday);
+}
+
+export function computeWeeklyLoadRanges(
+  sessions: SessionInput[],
+  referenceDate: Date = new Date(),
+  weekCount: number = 5,
+): WeeklyLoadRange[] {
+  const ref = startOfDay(referenceDate);
+  const currentSunday = getSundayOfWeek(ref);
+  const ranges: WeeklyLoadRange[] = [];
+
+  for (let w = weekCount - 1; w >= 0; w--) {
+    const weekEnd = new Date(currentSunday);
+    weekEnd.setDate(currentSunday.getDate() - w * 7);
+    const weekStart = new Date(weekEnd);
+    weekStart.setDate(weekEnd.getDate() - 6);
+
+    const weekTotal = sessions
+      .filter((s) => {
+        const d = startOfDay(toDate(s.date));
+        return d >= weekStart && d <= weekEnd;
+      })
+      .reduce((sum, s) => sum + computeSessionLoad(s.duration, s.rpe), 0);
+
+    ranges.push({
+      load: weekTotal,
+      startDate: weekStart.toISOString(),
+      endDate: weekEnd.toISOString(),
+    });
+  }
+
+  return ranges;
 }
 
 export function getDataSufficiencyFlags(

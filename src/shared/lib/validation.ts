@@ -1,4 +1,4 @@
-import { SESSION_TYPES, type SessionType } from "./types";
+import { SESSION_TYPES, type SessionType } from "@/shared/types";
 
 export interface ValidationError {
   field: string;

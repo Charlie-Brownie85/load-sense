@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/shared/lib/prisma";
 import {
   computeAcuteLoad,
   computeChronicLoad,
@@ -7,7 +7,7 @@ import {
   classifyStatus,
   computeWeeklyLoads,
   getDataSufficiencyFlags,
-} from "@/lib/workload";
+} from "@/shared/lib/workload";
 
 export async function GET() {
   const sessions = await prisma.session.findMany();

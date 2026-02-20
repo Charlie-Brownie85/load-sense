@@ -1,41 +1,6 @@
-import type { SessionType } from "@/lib/types";
-import { computeSessionLoad } from "@/lib/workload";
-
-const TYPE_CONFIG: Record<
-  SessionType,
-  { icon: string; bg: string; text: string; label: string }
-> = {
-  HIIT: {
-    icon: "bolt",
-    bg: "bg-orange-100",
-    text: "text-orange-600",
-    label: "High Intensity Intervals",
-  },
-  Strength: {
-    icon: "fitness_center",
-    bg: "bg-blue-100",
-    text: "text-blue-600",
-    label: "Strength Training",
-  },
-  Cardio: {
-    icon: "directions_run",
-    bg: "bg-emerald-100",
-    text: "text-emerald-600",
-    label: "Cardio Session",
-  },
-};
-
-function formatRelativeDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-  if (diffDays === 0) return "Today";
-  if (diffDays === 1) return "Yesterday";
-  if (diffDays < 7) return `${diffDays} days ago`;
-  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-}
+import type { SessionType } from "@/shared/types";
+import { computeSessionLoad } from "@/shared/lib/workload";
+import { TYPE_CONFIG, formatRelativeDate } from "../model";
 
 interface SessionCardProps {
   id: number;
@@ -60,7 +25,10 @@ export function SessionCard({
   const load = computeSessionLoad(duration, rpe);
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center gap-4 group transition-all hover:border-primary/50">
+    <div
+      className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center gap-4 group transition-all hover:border-primary/50 cursor-pointer"
+      onClick={() => onEdit(id)}
+    >
       <div
         className={`h-12 w-12 rounded-lg ${config.bg} ${config.text} flex items-center justify-center shrink-0`}
       >
@@ -95,14 +63,11 @@ export function SessionCard({
       </div>
       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
         <button
-          onClick={() => onEdit(id)}
-          className="p-1.5 text-slate-400 hover:text-primary rounded hover:bg-slate-100"
-        >
-          <span className="material-symbols-outlined">edit</span>
-        </button>
-        <button
-          onClick={() => onDelete(id)}
-          className="p-1.5 text-slate-400 hover:text-red-500 rounded hover:bg-slate-100"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(id);
+          }}
+          className="p-1.5 text-slate-400 hover:text-red-500 rounded hover:bg-slate-100 cursor-pointer"
         >
           <span className="material-symbols-outlined">delete</span>
         </button>
