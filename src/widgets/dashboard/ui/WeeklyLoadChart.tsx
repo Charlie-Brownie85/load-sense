@@ -44,7 +44,7 @@ export function WeeklyLoadChart({ weeklyLoadRanges }: WeeklyLoadChartProps) {
         Weekly Training Load
       </h3>
       <div
-        className="flex items-end justify-between h-48 gap-3 px-2"
+        className="flex justify-between h-48 gap-3 px-2"
         onMouseLeave={() => setHoveredIndex(null)}
       >
         {weeklyLoadRanges.map((range, i) => {
@@ -55,35 +55,39 @@ export function WeeklyLoadChart({ weeklyLoadRanges }: WeeklyLoadChartProps) {
           return (
             <div
               key={i}
-              className="flex-1 flex flex-col items-center gap-2 h-full justify-end"
+              className="flex-1 flex flex-col items-center h-full"
               onMouseEnter={() => setHoveredIndex(i)}
             >
-              <div
-                className="relative w-full"
-                style={{
-                  height: `${pct}%`,
-                  minHeight: range.load > 0 ? "4px" : "0",
-                }}
-              >
+              <div className="flex-1 w-full flex items-end">
                 <div
-                  className={`w-full h-full rounded-t-sm transition-opacity duration-200 ${getBarColor(i)} ${isDimmed ? "opacity-30" : ""}`}
-                />
-                {isHovered && (
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-50 px-3 py-2 text-xs font-medium text-white bg-slate-800 rounded-lg shadow-lg whitespace-nowrap pointer-events-none">
-                    {range.load.toLocaleString()} AU
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-4 border-t-slate-800 border-x-transparent border-b-transparent" />
-                  </div>
-                )}
+                  className="relative w-full"
+                  style={{
+                    height: `${pct}%`,
+                    minHeight: range.load > 0 ? "4px" : "0",
+                  }}
+                >
+                  <div
+                    className={`w-full h-full rounded-t-sm transition-opacity duration-200 ${getBarColor(i)} ${isDimmed ? "opacity-30" : ""}`}
+                  />
+                  {isHovered && (
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-50 px-3 py-2 text-xs font-medium text-white bg-slate-800 rounded-lg shadow-lg whitespace-nowrap pointer-events-none">
+                      {range.load.toLocaleString()} AU
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-4 border-t-slate-800 border-x-transparent border-b-transparent" />
+                    </div>
+                  )}
+                </div>
               </div>
-              <span
-                className={`text-[9px] font-bold leading-tight text-center ${
-                  i === weeklyLoadRanges.length - 1
-                    ? "text-primary"
-                    : "text-slate-400"
-                }`}
-              >
-                {formatDateRange(range.startDate, range.endDate)}
-              </span>
+              <div className="h-7 flex items-start justify-center pt-2">
+                <span
+                  className={`text-[9px] font-bold leading-tight text-center ${
+                    i === weeklyLoadRanges.length - 1
+                      ? "text-primary"
+                      : "text-slate-400"
+                  }`}
+                >
+                  {formatDateRange(range.startDate, range.endDate)}
+                </span>
+              </div>
             </div>
           );
         })}
