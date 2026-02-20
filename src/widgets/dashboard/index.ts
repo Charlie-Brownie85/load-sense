@@ -1,1 +1,1 @@
-export { WeeklyLoadChart } from "./ui/WeeklyLoadChart";
+export { WeeklyLoadChart } from './ui/WeeklyLoadChart';

@@ -1,15 +1,15 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/shared/lib/prisma";
-import { validateSession } from "@/shared/lib/validation";
+import { NextResponse } from 'next/server';
+import { prisma } from '@/shared/lib/prisma';
+import { validateSession } from '@/shared/lib/validation';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const cursorParam = searchParams.get("cursor");
-  const limitParam = searchParams.get("limit");
+  const cursorParam = searchParams.get('cursor');
+  const limitParam = searchParams.get('limit');
   const limit = Math.min(Math.max(Number(limitParam) || 20, 1), 100);
 
   const sessions = await prisma.session.findMany({
-    orderBy: [{ date: "desc" }, { id: "desc" }],
+    orderBy: [{ date: 'desc' }, { id: 'desc' }],
     take: limit + 1,
     ...(cursorParam
       ? {

@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState, useRef, useEffect, useCallback } from "react";
-import type { Session, PaginatedSessionsResponse } from "@/shared/types";
+import { useState, useRef, useEffect, useCallback } from 'react';
+import type { Session, PaginatedSessionsResponse } from '@/shared/types';
 
 interface UseSessionPaginationOptions {
   initialSessions: Session[];

@@ -4,7 +4,7 @@ interface AcwrGaugeProps {
 
 export function AcwrGauge({ acwr }: AcwrGaugeProps) {
   const getIndicatorPosition = (): string => {
-    if (acwr === null) return "50%";
+    if (acwr === null) return '50%';
     const clamped = Math.min(Math.max(acwr, 0), 2.0);
     return `${(clamped / 2.0) * 100}%`;
   };

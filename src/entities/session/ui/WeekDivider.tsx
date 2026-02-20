@@ -7,8 +7,8 @@ interface WeekDividerProps {
 function formatWeekRange(startIso: string, endIso: string): string {
   const start = new Date(startIso);
   const end = new Date(endIso);
-  const startMonth = start.toLocaleDateString("en-US", { month: "short" });
-  const endMonth = end.toLocaleDateString("en-US", { month: "short" });
+  const startMonth = start.toLocaleDateString('en-US', { month: 'short' });
+  const endMonth = end.toLocaleDateString('en-US', { month: 'short' });
   const startDay = start.getDate();
   const endDay = end.getDate();
 

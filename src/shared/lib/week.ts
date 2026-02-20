@@ -1,5 +1,5 @@
 function toDate(d: Date | string): Date {
-  return typeof d === "string" ? new Date(d) : d;
+  return typeof d === 'string' ? new Date(d) : d;
 }
 
 function startOfDay(d: Date): Date {
@@ -32,7 +32,7 @@ function isoWeekNumber(d: Date): { year: number; week: number } {
 export function getISOWeekKey(date: Date | string): string {
   const d = toDate(date);
   const { year, week } = isoWeekNumber(d);
-  return `${year}-W${String(week).padStart(2, "0")}`;
+  return `${year}-W${String(week).padStart(2, '0')}`;
 }
 
 export function getWeekBounds(weekKey: string): { start: Date; end: Date } {

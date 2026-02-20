@@ -1,1 +1,1 @@
-export { useSessionPagination } from "./model/useSessionPagination";
+export { useSessionPagination } from './model/useSessionPagination';

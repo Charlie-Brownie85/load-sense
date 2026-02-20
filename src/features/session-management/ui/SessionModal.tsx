@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import type { SessionType } from "@/shared/types";
-import { SESSION_TYPES } from "@/shared/types";
+import { useState, useEffect } from 'react';
+import type { SessionType } from '@/shared/types';
+import { SESSION_TYPES } from '@/shared/types';
 
 interface SessionModalProps {
   isOpen: boolean;
@@ -24,26 +24,26 @@ export function SessionModal({
   onSaved,
   editSession,
 }: SessionModalProps) {
-  const [date, setDate] = useState("");
-  const [type, setType] = useState<SessionType | "">("");
-  const [duration, setDuration] = useState("");
+  const [date, setDate] = useState('');
+  const [type, setType] = useState<SessionType | ''>('');
+  const [duration, setDuration] = useState('');
   const [rpe, setRpe] = useState(5);
-  const [notes, setNotes] = useState("");
+  const [notes, setNotes] = useState('');
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (editSession) {
-      setDate(new Date(editSession.date).toISOString().split("T")[0]);
+      setDate(new Date(editSession.date).toISOString().split('T')[0]);
       setType(editSession.type);
       setDuration(String(editSession.duration));
       setRpe(editSession.rpe);
-      setNotes(editSession.notes || "");
+      setNotes(editSession.notes || '');
     } else {
-      setDate(new Date().toISOString().split("T")[0]);
-      setType("");
-      setDuration("");
+      setDate(new Date().toISOString().split('T')[0]);
+      setType('');
+      setDuration('');
       setRpe(5);
-      setNotes("");
+      setNotes('');
     }
   }, [editSession, isOpen]);
 
@@ -64,14 +64,14 @@ export function SessionModal({
 
       if (editSession) {
         await fetch(`/api/sessions/${editSession.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(body),
         });
       } else {
-        await fetch("/api/sessions", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        await fetch('/api/sessions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(body),
         });
       }
@@ -89,12 +89,12 @@ export function SessionModal({
         <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100">
           <div>
             <h2 className="text-xl font-bold text-slate-900">
-              {editSession ? "Edit Session" : "Add New Session"}
+              {editSession ? 'Edit Session' : 'Add New Session'}
             </h2>
             <p className="text-sm text-slate-500">
               {editSession
-                ? "Update your workout details"
-                : "Log your latest workout details"}
+                ? 'Update your workout details'
+                : 'Log your latest workout details'}
             </p>
           </div>
           <button
@@ -147,7 +147,7 @@ export function SessionModal({
               </option>
               {SESSION_TYPES.map((t) => (
                 <option key={t} value={t}>
-                  {t === "HIIT" ? "HIIT / Metcon" : t === "Strength" ? "Strength Training" : "Cardio / Endurance"}
+                  {t === 'HIIT' ? 'HIIT / Metcon' : t === 'Strength' ? 'Strength Training' : 'Cardio / Endurance'}
                 </option>
               ))}
             </select>
@@ -210,7 +210,7 @@ export function SessionModal({
             className="px-6 h-11 rounded-lg text-sm font-bold text-white bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             <span className="material-symbols-outlined text-[18px]">check</span>
-            {saving ? "Saving..." : "Save Session"}
+            {saving ? 'Saving...' : 'Save Session'}
           </button>
         </div>
       </div>

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -7,7 +7,7 @@ interface ConfirmModalProps {
   title: string;
   message: string;
   confirmLabel?: string;
-  confirmVariant?: "danger" | "primary";
+  confirmVariant?: 'danger' | 'primary';
 }
 
 export function ConfirmModal({
@@ -16,15 +16,15 @@ export function ConfirmModal({
   onConfirm,
   title,
   message,
-  confirmLabel = "Delete",
-  confirmVariant = "danger",
+  confirmLabel = 'Delete',
+  confirmVariant = 'danger',
 }: ConfirmModalProps) {
   if (!isOpen) return null;
 
   const confirmButtonClass =
-    confirmVariant === "danger"
-      ? "bg-red-600 hover:bg-red-700 shadow-red-600/20"
-      : "bg-primary hover:bg-primary/90 shadow-primary/20";
+    confirmVariant === 'danger'
+      ? 'bg-red-600 hover:bg-red-700 shadow-red-600/20'
+      : 'bg-primary hover:bg-primary/90 shadow-primary/20';
 
   return (
     <div

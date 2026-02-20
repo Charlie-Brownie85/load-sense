@@ -1,13 +1,13 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
-import { useSessionPagination } from "../model/useSessionPagination";
-import type { Session } from "@/shared/types";
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { render, screen, waitFor } from '@testing-library/react';
+import { useSessionPagination } from '../model/useSessionPagination';
+import type { Session } from '@/shared/types';
 
 function makeSession(id: number, date: string): Session {
   return {
     id,
     date,
-    type: "Strength",
+    type: 'Strength',
     duration: 60,
     rpe: 7,
     notes: null,
@@ -17,11 +17,11 @@ function makeSession(id: number, date: string): Session {
 }
 
 const page1: Session[] = [
-  makeSession(3, "2026-02-20T10:00:00Z"),
-  makeSession(2, "2026-02-18T10:00:00Z"),
+  makeSession(3, '2026-02-20T10:00:00Z'),
+  makeSession(2, '2026-02-18T10:00:00Z'),
 ];
 
-const page2: Session[] = [makeSession(1, "2026-02-15T10:00:00Z")];
+const page2: Session[] = [makeSession(1, '2026-02-15T10:00:00Z')];
 
 function TestComponent({
   initialSessions,
@@ -52,7 +52,7 @@ function TestComponent({
   );
 }
 
-describe("useSessionPagination", () => {
+describe('useSessionPagination', () => {
   let observerCallback: IntersectionObserverCallback;
   let mockObserve: ReturnType<typeof vi.fn>;
   let mockDisconnect: ReturnType<typeof vi.fn>;
@@ -70,14 +70,14 @@ describe("useSessionPagination", () => {
       unobserve = vi.fn();
       takeRecords = vi.fn().mockReturnValue([]);
       root = null;
-      rootMargin = "";
+      rootMargin = '';
       thresholds = [0];
     }
 
-    vi.stubGlobal("IntersectionObserver", MockIntersectionObserver);
+    vi.stubGlobal('IntersectionObserver', MockIntersectionObserver);
 
     vi.stubGlobal(
-      "fetch",
+      'fetch',
       vi.fn(() =>
         Promise.resolve({
           json: () =>
@@ -95,7 +95,7 @@ describe("useSessionPagination", () => {
     vi.restoreAllMocks();
   });
 
-  it("returns initial sessions", () => {
+  it('returns initial sessions', () => {
     render(
       <TestComponent
         initialSessions={page1}
@@ -104,11 +104,11 @@ describe("useSessionPagination", () => {
       />,
     );
 
-    expect(screen.getByTestId("count").textContent).toBe("2");
-    expect(screen.getByTestId("loading").textContent).toBe("false");
+    expect(screen.getByTestId('count').textContent).toBe('2');
+    expect(screen.getByTestId('loading').textContent).toBe('false');
   });
 
-  it("fetches next page on sentinel intersection", async () => {
+  it('fetches next page on sentinel intersection', async () => {
     render(
       <TestComponent
         initialSessions={page1}
@@ -123,13 +123,13 @@ describe("useSessionPagination", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId("count").textContent).toBe("3");
+      expect(screen.getByTestId('count').textContent).toBe('3');
     });
 
-    expect(fetch).toHaveBeenCalledWith("/api/sessions?cursor=2&limit=20");
+    expect(fetch).toHaveBeenCalledWith('/api/sessions?cursor=2&limit=20');
   });
 
-  it("stops fetching when hasMore is false", () => {
+  it('stops fetching when hasMore is false', () => {
     render(
       <TestComponent
         initialSessions={page1}
@@ -141,10 +141,10 @@ describe("useSessionPagination", () => {
     expect(mockObserve).not.toHaveBeenCalled();
   });
 
-  it("shows loading state during fetch", async () => {
+  it('shows loading state during fetch', async () => {
     let resolveJson: (value: unknown) => void;
     vi.stubGlobal(
-      "fetch",
+      'fetch',
       vi.fn(
         () =>
           new Promise((resolve) => {
@@ -168,13 +168,13 @@ describe("useSessionPagination", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId("loading").textContent).toBe("true");
+      expect(screen.getByTestId('loading').textContent).toBe('true');
     });
 
     resolveJson!({ sessions: page2, nextCursor: null, hasMore: false });
 
     await waitFor(() => {
-      expect(screen.getByTestId("loading").textContent).toBe("false");
+      expect(screen.getByTestId('loading').textContent).toBe('false');
     });
   });
 });

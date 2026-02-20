@@ -1,1 +1,1 @@
-export { useWeekSessionSync } from "./model/useWeekSessionSync";
+export { useWeekSessionSync } from './model/useWeekSessionSync';

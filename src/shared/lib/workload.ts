@@ -1,4 +1,4 @@
-import type { TrainingStatus } from "@/shared/types";
+import type { TrainingStatus } from '@/shared/types';
 
 export const ACUTE_WINDOW_DAYS = 7;
 export const CHRONIC_WINDOW_DAYS = 28;
@@ -17,7 +17,7 @@ interface SessionInput {
 }
 
 function toDate(d: Date | string): Date {
-  return typeof d === "string" ? new Date(d) : d;
+  return typeof d === 'string' ? new Date(d) : d;
 }
 
 function startOfDay(d: Date): Date {
@@ -85,11 +85,11 @@ export function computeACWR(
 }
 
 export function classifyStatus(acwr: number | null): TrainingStatus {
-  if (acwr === null) return "Insufficient Data";
-  if (acwr < ACWR_THRESHOLDS.undertraining) return "Undertraining";
-  if (acwr <= ACWR_THRESHOLDS.optimalUpper) return "Optimal Zone";
-  if (acwr <= ACWR_THRESHOLDS.fatigueUpper) return "Fatigue Risk";
-  return "High Injury Risk";
+  if (acwr === null) return 'Insufficient Data';
+  if (acwr < ACWR_THRESHOLDS.undertraining) return 'Undertraining';
+  if (acwr <= ACWR_THRESHOLDS.optimalUpper) return 'Optimal Zone';
+  if (acwr <= ACWR_THRESHOLDS.fatigueUpper) return 'Fatigue Risk';
+  return 'High Injury Risk';
 }
 
 export function computeWeeklyLoads(
@@ -192,4 +192,18 @@ export function getDataSufficiencyFlags(
     isAcuteIncomplete: daySpan < ACUTE_WINDOW_DAYS,
     isChronicUnstable: daySpan < CHRONIC_WINDOW_DAYS,
   };
+}
+
+export function computeWeekSpan(
+  sessions: { date: Date | string }[],
+  now: Date,
+): number {
+  if (sessions.length === 0) return 1;
+  const dates = sessions.map((s) =>
+    typeof s.date === 'string' ? new Date(s.date) : s.date,
+  );
+  const earliest = new Date(Math.min(...dates.map((d) => d.getTime())));
+  const diffMs = now.getTime() - earliest.getTime();
+  const diffWeeks = Math.ceil(diffMs / (7 * 24 * 60 * 60 * 1000));
+  return Math.max(diffWeeks + 1, 1);
 }

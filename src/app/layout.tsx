@@ -1,10 +1,13 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "LoadSense | Training Load Manager",
+  title: 'LoadSense | Training Load Manager',
   description:
-    "Track training sessions, calculate workload, and monitor overtraining risk with ACWR analysis.",
+    'Track training sessions, calculate workload, and monitor overtraining risk with ACWR analysis.',
 };
 
 export default function RootLayout({
@@ -15,16 +18,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
-          rel="stylesheet"
-        />
+        {/* eslint-disable-next-line @next/next/no-page-custom-font -- icon font not supported by next/font */}
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="bg-background-light text-slate-900 min-h-screen antialiased">
+      <body className={`${inter.className} bg-background-light text-slate-900 min-h-screen antialiased`}>
         {children}
       </body>
     </html>

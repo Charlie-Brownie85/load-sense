@@ -1,4 +1,4 @@
-import { Tooltip } from "./Tooltip";
+import { Tooltip } from './Tooltip';
 
 interface MetricCardProps {
   label: string;
@@ -10,7 +10,7 @@ interface MetricCardProps {
 
 export function MetricCard({ label, value, subtitle, warning, tooltip }: MetricCardProps) {
   const labelElement = (
-    <p className={`text-slate-500 text-xs font-bold uppercase ${tooltip ? "cursor-help" : ""}`}>
+    <p className={`text-slate-500 text-xs font-bold uppercase ${tooltip ? 'cursor-help' : ''}`}>
       {label}
     </p>
   );

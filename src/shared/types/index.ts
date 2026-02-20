@@ -1,13 +1,13 @@
-export type SessionType = "Strength" | "HIIT" | "Cardio";
+export type SessionType = 'Strength' | 'HIIT' | 'Cardio';
 
-export const SESSION_TYPES: SessionType[] = ["Strength", "HIIT", "Cardio"];
+export const SESSION_TYPES: SessionType[] = ['Strength', 'HIIT', 'Cardio'];
 
 export type TrainingStatus =
-  | "Undertraining"
-  | "Optimal Zone"
-  | "Fatigue Risk"
-  | "High Injury Risk"
-  | "Insufficient Data";
+  | 'Undertraining'
+  | 'Optimal Zone'
+  | 'Fatigue Risk'
+  | 'High Injury Risk'
+  | 'Insufficient Data';
 
 export interface Session {
   id: number;

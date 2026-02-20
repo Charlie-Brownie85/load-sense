@@ -1,37 +1,22 @@
-import { prisma } from "@/shared/lib/prisma";
+import { prisma } from '@/shared/lib/prisma';
 import {
   computeAcuteLoad,
   computeChronicLoad,
   computeACWR,
   classifyStatus,
   computeWeeklyLoadRanges,
+  computeWeekSpan,
   getDataSufficiencyFlags,
-} from "@/shared/lib/workload";
-import { Navbar } from "@/shared/ui/Navbar";
-import { DashboardClient } from "./DashboardClient";
-import type { SessionType } from "@/shared/types";
-
-export const dynamic = "force-dynamic";
+} from '@/shared/lib/workload';
+import { Navbar } from '@/shared/ui/Navbar';
+import { DashboardClient } from './DashboardClient';
+import type { SessionType } from '@/shared/types';
 
 const PAGE_SIZE = 20;
 
-function computeWeekSpan(
-  sessions: { date: Date | string }[],
-  now: Date,
-): number {
-  if (sessions.length === 0) return 1;
-  const dates = sessions.map((s) =>
-    typeof s.date === "string" ? new Date(s.date) : s.date,
-  );
-  const earliest = new Date(Math.min(...dates.map((d) => d.getTime())));
-  const diffMs = now.getTime() - earliest.getTime();
-  const diffWeeks = Math.ceil(diffMs / (7 * 24 * 60 * 60 * 1000));
-  return Math.max(diffWeeks + 1, 1);
-}
-
-export default async function DashboardPage() {
+export async function DashboardPage() {
   const sessions = await prisma.session.findMany({
-    orderBy: [{ date: "desc" }, { id: "desc" }],
+    orderBy: [{ date: 'desc' }, { id: 'desc' }],
   });
 
   const now = new Date();

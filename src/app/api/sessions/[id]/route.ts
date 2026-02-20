@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/shared/lib/prisma";
-import { validateSession } from "@/shared/lib/validation";
+import { NextResponse } from 'next/server';
+import { prisma } from '@/shared/lib/prisma';
+import { validateSession } from '@/shared/lib/validation';
 
 export async function PUT(
   request: Request,
@@ -10,7 +10,7 @@ export async function PUT(
   const sessionId = parseInt(id, 10);
 
   if (isNaN(sessionId)) {
-    return NextResponse.json({ error: "Invalid session ID" }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid session ID' }, { status: 400 });
   }
 
   const body = await request.json();
@@ -35,7 +35,7 @@ export async function PUT(
 
     return NextResponse.json(session);
   } catch {
-    return NextResponse.json({ error: "Session not found" }, { status: 404 });
+    return NextResponse.json({ error: 'Session not found' }, { status: 404 });
   }
 }
 
@@ -47,13 +47,13 @@ export async function DELETE(
   const sessionId = parseInt(id, 10);
 
   if (isNaN(sessionId)) {
-    return NextResponse.json({ error: "Invalid session ID" }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid session ID' }, { status: 400 });
   }
 
   try {
     await prisma.session.delete({ where: { id: sessionId } });
     return NextResponse.json({ success: true });
   } catch {
-    return NextResponse.json({ error: "Session not found" }, { status: 404 });
+    return NextResponse.json({ error: 'Session not found' }, { status: 404 });
   }
 }

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useCallback, useRef } from "react";
-import type { RefObject } from "react";
-import { smoothScrollTo } from "@/shared/lib/smooth-scroll";
+import { useState, useEffect, useCallback, useRef } from 'react';
+import type { RefObject } from 'react';
+import { smoothScrollTo } from '@/shared/lib/smooth-scroll';
 
 interface UseWeekSessionSyncOptions {
   containerRef: RefObject<HTMLElement | null>;
@@ -24,9 +24,9 @@ export function useWeekSessionSync({
     const container = containerRef.current;
     if (!container) return;
 
-    const dividers = container.querySelectorAll<HTMLElement>("[data-week]");
+    const dividers = container.querySelectorAll<HTMLElement>('[data-week]');
     if (dividers.length > 0 && !activeWeekKey) {
-      const firstWeek = dividers[0].getAttribute("data-week");
+      const firstWeek = dividers[0].getAttribute('data-week');
       if (firstWeek) setActiveWeekKey(firstWeek);
     }
 
@@ -44,13 +44,13 @@ export function useWeekSessionSync({
 
         if (visibleDividers.length > 0) {
           const topmost = visibleDividers[0];
-          const weekKey = topmost.getAttribute("data-week");
+          const weekKey = topmost.getAttribute('data-week');
           if (weekKey) setActiveWeekKey(weekKey);
         }
       },
       {
         root: container,
-        rootMargin: "0px 0px -70% 0px",
+        rootMargin: '0px 0px -70% 0px',
         threshold: 0,
       },
     );

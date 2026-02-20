@@ -1,6 +1,6 @@
-import type { SessionType } from "@/shared/types";
-import { computeSessionLoad } from "@/shared/lib/workload";
-import { TYPE_CONFIG, formatRelativeDate } from "../model";
+import type { SessionType } from '@/shared/types';
+import { computeSessionLoad } from '@/shared/lib/workload';
+import { TYPE_CONFIG, formatRelativeDate } from '../model';
 
 interface SessionCardProps {
   id: number;

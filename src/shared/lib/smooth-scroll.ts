@@ -27,8 +27,8 @@ export function smoothScrollTo(
       cancelled = true;
     };
 
-    container.addEventListener("wheel", onUserScroll, { passive: true });
-    container.addEventListener("touchmove", onUserScroll, { passive: true });
+    container.addEventListener('wheel', onUserScroll, { passive: true });
+    container.addEventListener('touchmove', onUserScroll, { passive: true });
 
     function step(timestamp: number) {
       if (cancelled) {
@@ -53,8 +53,8 @@ export function smoothScrollTo(
     }
 
     function cleanup() {
-      container.removeEventListener("wheel", onUserScroll);
-      container.removeEventListener("touchmove", onUserScroll);
+      container.removeEventListener('wheel', onUserScroll);
+      container.removeEventListener('touchmove', onUserScroll);
     }
 
     requestAnimationFrame(step);

@@ -9,7 +9,12 @@ Tech stack: TypeScript (strict), React 19, Next.js 16 App Router, Tailwind CSS v
 
 ```
 src/
-├── app/           # App layer — Next.js routes, layouts, API handlers
+├── app/           # App layer — thin Next.js routing stubs, layouts, API handlers
+│   ├── (routes)/  # Route group — page route stubs (2-3 lines each, import from views/)
+│   ├── api/       # API route handlers
+│   ├── layout.tsx # Root layout
+│   └── globals.css
+├── views/         # Views (FSD pages) — full-page compositions (compose widgets/features/entities)
 ├── widgets/       # Widgets — composite UI blocks (compose features/entities)
 ├── features/      # Features — user-facing interactions
 ├── entities/      # Entities — domain models + entity-scoped UI
@@ -17,17 +22,20 @@ src/
 └── generated/     # Prisma client (auto-generated, never edit)
 ```
 
+> **Note:** The FSD "pages" layer is named `views/` because Next.js reserves `src/pages/` for its Pages Router. Route files in `app/(routes)/` are ultra-thin stubs that re-export from `views/`.
+
 ### Import Rule (strict)
 
 Layers can ONLY import from layers below them:
 
-    app → widgets → features → entities → shared
+    app → views → widgets → features → entities → shared
 
 Violations of this rule are bugs. Specifically:
-- `shared/` MUST NOT import from `entities/`, `features/`, `widgets/`, or `app/`
-- `entities/` MUST NOT import from `features/`, `widgets/`, or `app/`
-- `features/` MUST NOT import from `widgets/` or `app/`
-- `widgets/` MUST NOT import from `app/`
+- `shared/` MUST NOT import from `entities/`, `features/`, `widgets/`, `views/`, or `app/`
+- `entities/` MUST NOT import from `features/`, `widgets/`, `views/`, or `app/`
+- `features/` MUST NOT import from `widgets/`, `views/`, or `app/`
+- `widgets/` MUST NOT import from `views/` or `app/`
+- `views/` MUST NOT import from `app/`
 - Cross-slice imports within the same layer are allowed but discouraged
 
 ### Barrel Exports
@@ -87,7 +95,7 @@ When generating implementation tasks (OpenSpec `tasks.md` or any plan):
 Every new feature, component, or utility function MUST include unit tests unless technically infeasible (e.g., thin server components that only fetch and pass props). Specifically:
 
 - **New `shared/lib/` function** → test file in `shared/lib/__tests__/` covering inputs, outputs, and edge cases
-- **New UI component** (`shared/ui/`, `entities/*/ui/`, `features/*/ui/`, `widgets/*/ui/`) → test file in the slice's `__tests__/` directory covering rendering, user interactions, and prop variants
+- **New UI component** (`shared/ui/`, `entities/*/ui/`, `features/*/ui/`, `widgets/*/ui/`, `views/*/ui/`) → test file in the slice's `__tests__/` directory covering rendering, user interactions, and prop variants
 - **New entity model** (`entities/*/model.ts`) → test the exported helpers and type guards
 - **Bug fix** → add a regression test that would have caught the bug
 

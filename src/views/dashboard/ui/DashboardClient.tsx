@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { useState, useRef, useMemo } from "react";
-import { useRouter } from "next/navigation";
-import type { TrainingStatus, SessionType, Session } from "@/shared/types";
-import type { WeeklyLoadRange } from "@/shared/lib/workload";
-import { getISOWeekKey, getWeekBounds } from "@/shared/lib/week";
-import { StatusBadge } from "@/shared/ui/StatusBadge";
-import { MetricCard } from "@/shared/ui/MetricCard";
-import { AcwrGauge } from "@/shared/ui/AcwrGauge";
-import { Tooltip } from "@/shared/ui/Tooltip";
-import { ConfirmModal } from "@/shared/ui/ConfirmModal";
-import { WeeklyLoadChart } from "@/widgets/dashboard";
-import { SessionCard, WeekDivider } from "@/entities/session";
-import { SessionModal } from "@/features/session-management";
-import { FloatingActionButton } from "@/shared/ui/FloatingActionButton";
-import { useWeekSessionSync } from "@/features/week-navigation";
-import { useSessionPagination } from "@/features/session-pagination";
+import { useState, useRef, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+import type { TrainingStatus, SessionType, Session } from '@/shared/types';
+import type { WeeklyLoadRange } from '@/shared/lib/workload';
+import { getISOWeekKey, getWeekBounds } from '@/shared/lib/week';
+import { StatusBadge } from '@/shared/ui/StatusBadge';
+import { MetricCard } from '@/shared/ui/MetricCard';
+import { AcwrGauge } from '@/shared/ui/AcwrGauge';
+import { Tooltip } from '@/shared/ui/Tooltip';
+import { ConfirmModal } from '@/shared/ui/ConfirmModal';
+import { WeeklyLoadChart } from '@/widgets/dashboard';
+import { SessionCard, WeekDivider } from '@/entities/session';
+import { SessionModal } from '@/features/session-management';
+import { FloatingActionButton } from '@/shared/ui/FloatingActionButton';
+import { useWeekSessionSync } from '@/features/week-navigation';
+import { useSessionPagination } from '@/features/session-pagination';
 
 interface DashboardClientProps {
   sessions: Session[];
@@ -118,7 +118,7 @@ export function DashboardClient({
 
   const handleDeleteConfirm = async () => {
     if (deleteTargetId === null) return;
-    await fetch(`/api/sessions/${deleteTargetId}`, { method: "DELETE" });
+    await fetch(`/api/sessions/${deleteTargetId}`, { method: 'DELETE' });
     setDeleteTargetId(null);
     router.refresh();
   };
@@ -137,9 +137,9 @@ export function DashboardClient({
     scrollToWeek(weekKey);
   };
 
-  const acwrDisplay = acwr !== null ? acwr.toFixed(2) : "—";
+  const acwrDisplay = acwr !== null ? acwr.toFixed(2) : '—';
   const trendIcon =
-    acwr !== null && acwr >= 0.8 && acwr <= 1.3 ? "trending_up" : "trending_flat";
+    acwr !== null && acwr >= 0.8 && acwr <= 1.3 ? 'trending_up' : 'trending_flat';
 
   return (
     <main className="max-w-6xl mx-auto p-4 md:p-8 space-y-8">
@@ -189,7 +189,7 @@ export function DashboardClient({
 
       {/* Two-Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-1 lg:sticky lg:top-[calc(4rem+1px+theme(spacing.8)+200px)] lg:self-start">
+        <div className="lg:col-span-1 lg:sticky lg:top-[calc(4rem+1px+(--spacing(8))+200px)] lg:self-start">
           <WeeklyLoadChart
             weeklyLoadRanges={weeklyLoadRanges}
             activeWeekKey={activeWeekKey ?? undefined}
