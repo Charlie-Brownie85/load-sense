@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LoadSense v2.0 - Toast Notifications</title>
+<!-- Google Fonts: Inter for professional dashboard look -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+<style data-purpose="custom-animations">
+    /* Subtle slide-in animation for the toasts */
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    .animate-toast {
+      animation: slideIn 0.3s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 min-h-screen font-sans">
+<!-- BEGIN: Page Layout Container -->
+<main class="relative h-screen w-full p-8" data-purpose="reference-screen">
+<!-- Background Content Mockup to show contrast -->
+<div class="max-w-4xl mx-auto mt-12 opacity-40 select-none pointer-events-none">
+<h1 class="text-3xl font-bold text-slate-900 mb-4">Dashboard Overview</h1>
+<div class="grid grid-cols-3 gap-6">
+<div class="h-32 bg-white rounded-xl border border-slate-200 shadow-sm"></div>
+<div class="h-32 bg-white rounded-xl border border-slate-200 shadow-sm"></div>
+<div class="h-32 bg-white rounded-xl border border-slate-200 shadow-sm"></div>
+</div>
+<div class="mt-8 h-64 bg-white rounded-xl border border-slate-200 shadow-sm"></div>
+</div>
+<!-- BEGIN: Toast Notification Container -->
+<!-- Positioned top-right as per requirements -->
+<section class="fixed top-6 right-6 z-50 flex flex-col gap-4 w-full max-w-sm" data-purpose="toast-container" id="toast-stack">
+<!-- BEGIN: Info Toast -->
+<div class="animate-toast bg-white border-l-4 border-blue-500 rounded-lg shadow-lg p-4 flex items-start gap-3" data-purpose="toast-variant-info">
+<div class="flex-shrink-0 text-blue-500 mt-0.5">
+<!-- Information Circle Icon -->
+<svg class="h-5 w-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<div class="flex-grow">
+<p class="text-sm font-semibold text-slate-900">System Update</p>
+<p class="text-xs text-slate-600 mt-1">LoadSense v2.0 optimization is running in the background.</p>
+</div>
+<button aria-label="Close notification" class="flex-shrink-0 text-slate-400 hover:text-slate-600 transition-colors">
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+<!-- END: Info Toast -->
+<!-- BEGIN: Warning Toast -->
+<div class="animate-toast bg-white border-l-4 border-amber-500 rounded-lg shadow-lg p-4 flex items-start gap-3" data-purpose="toast-variant-warning">
+<div class="flex-shrink-0 text-amber-500 mt-0.5">
+<!-- Warning Triangle Icon -->
+<svg class="h-5 w-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<div class="flex-grow">
+<p class="text-sm font-semibold text-slate-900">Usage Alert</p>
+<p class="text-xs text-slate-600 mt-1">Your monthly data threshold is at 85% capacity.</p>
+</div>
+<button aria-label="Close notification" class="flex-shrink-0 text-slate-400 hover:text-slate-600 transition-colors">
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+<!-- END: Warning Toast -->
+<!-- BEGIN: Danger Toast -->
+<div class="animate-toast bg-white border-l-4 border-red-500 rounded-lg shadow-lg p-4 flex items-start gap-3" data-purpose="toast-variant-danger">
+<div class="flex-shrink-0 text-red-500 mt-0.5">
+<!-- Error Circle Icon -->
+<svg class="h-5 w-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<div class="flex-grow">
+<p class="text-sm font-semibold text-slate-900">Connection Failed</p>
+<p class="text-xs text-slate-600 mt-1">Unable to sync sensors. Please check your hardware connection.</p>
+</div>
+<button aria-label="Close notification" class="flex-shrink-0 text-slate-400 hover:text-slate-600 transition-colors">
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+<!-- END: Danger Toast -->
+<!-- BEGIN: Success Toast -->
+<div class="animate-toast bg-white border-l-4 border-green-500 rounded-lg shadow-lg p-4 flex items-start gap-3" data-purpose="toast-variant-success">
+<div class="flex-shrink-0 text-green-500 mt-0.5">
+<!-- Check Circle Icon -->
+<svg class="h-5 w-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<div class="flex-grow">
+<p class="text-sm font-semibold text-slate-900">Report Generated</p>
+<p class="text-xs text-slate-600 mt-1">Your weekly LoadSense report is ready for download.</p>
+</div>
+<button aria-label="Close notification" class="flex-shrink-0 text-slate-400 hover:text-slate-600 transition-colors">
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+<!-- END: Success Toast -->
+</section>
+<!-- END: Toast Notification Container -->
+<!-- Descriptive Metadata (Hidden/Utility) -->
+<div class="fixed bottom-6 left-6 text-slate-400 text-xs" data-purpose="component-label">
+      LoadSense v2.0 | Toast Variants Reference
+    </div>
+</main>
+<!-- END: Page Layout Container -->
+<script data-purpose="toast-interactivity">
+    /* 
+       Simple script to handle toast closing interaction for the reference screen.
+       In a production environment, this would likely be handled by a framework's state management.
+    */
+    document.addEventListener('DOMContentLoaded', () => {
+      const closeButtons = document.querySelectorAll('button[aria-label="Close notification"]');
+      
+      closeButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+          const toast = e.currentTarget.closest('[data-purpose^="toast-variant-"]');
+          if (toast) {
+            // Apply fade out effect
+            toast.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+            toast.style.opacity = '0';
+            toast.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+              toast.remove();
+            }, 200);
+          }
+        });
+      });
+    });
+  </script>
+</body></html>
