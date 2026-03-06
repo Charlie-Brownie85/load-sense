@@ -42,13 +42,13 @@ export function ConfirmModal({
         <div className="px-6 py-4 border-t border-slate-100 flex items-center justify-end gap-3 bg-slate-50/50">
           <button
             onClick={onClose}
-            className="px-4 h-10 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
+            className="px-4 h-10 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer focus-visible:focus-ring"
           >
             Cancel
           </button>
           <button
             onClick={onConfirm}
-            className={`px-5 h-10 rounded-lg text-sm font-bold text-white shadow-lg transition-all cursor-pointer ${confirmButtonClass}`}
+            className={`px-5 h-10 rounded-lg text-sm font-bold text-white shadow-lg transition-all cursor-pointer focus-visible:focus-ring ${confirmButtonClass}`}
           >
             {confirmLabel}
           </button>
