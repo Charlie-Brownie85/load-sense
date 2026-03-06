@@ -105,9 +105,15 @@ export function WeeklyLoadChart({
 
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-      <h3 className="text-sm font-bold text-slate-900 mb-6 uppercase tracking-tight">
-        Weekly Training Load
-      </h3>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-sm font-bold text-slate-900 uppercase tracking-tight">
+          Weekly Training Load
+        </h3>
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-xs text-slate-400 font-medium">Avg</span>
+          <span className="text-sm font-bold text-slate-700">{avgLoad.toLocaleString()} AU</span>
+        </div>
+      </div>
       <div className="relative">
         {canScrollLeft && (
           <div className="absolute left-0 top-0 bottom-7 w-8 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
@@ -131,7 +137,7 @@ export function WeeklyLoadChart({
                 key={weekKey}
                 data-week={weekKey}
                 className="flex flex-col items-center h-full cursor-pointer"
-                style={{ minWidth: '56px', flex: '0 0 56px' }}
+                style={{ minWidth: '48px', flex: '1 1 0%' }}
                 onMouseEnter={(e) => {
                   setHoveredIndex(i);
                   const bar = e.currentTarget.querySelector<HTMLElement>('[data-bar]');
@@ -180,14 +186,6 @@ export function WeeklyLoadChart({
             <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-4 border-t-slate-800 border-x-transparent border-b-transparent" />
           </div>
         )}
-      </div>
-      <div className="mt-8 pt-6 border-t border-slate-100">
-        <div className="flex justify-between items-center">
-          <p className="text-xs text-slate-500 font-medium">Avg. Weekly Load</p>
-          <p className="text-sm font-bold text-slate-900">
-            {avgLoad.toLocaleString()} AU
-          </p>
-        </div>
       </div>
     </div>
   );
