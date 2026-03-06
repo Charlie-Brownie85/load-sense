@@ -145,17 +145,17 @@ export function DashboardClient({
     <main className="max-w-6xl mx-auto p-4 md:p-8 space-y-8">
       {/* Status Overview Panel — sticky below navbar */}
       <section className="bg-white rounded-xl shadow-sm border border-slate-200 sticky top-16 z-10 shadow-slate-200/60">
-        <div className="p-6 md:p-8 flex flex-col md:flex-row items-center gap-8">
+        <div className="p-5 md:p-6 flex flex-col md:flex-row items-center gap-6">
           <div className="flex-1 space-y-4 text-center md:text-left">
             <StatusBadge status={status} />
             <div>
               <Tooltip content="Acute:Chronic Workload Ratio — compares your recent load to your longer-term average. Optimal range is 0.8–1.3.">
-                <p className="text-slate-500 text-sm font-medium uppercase tracking-wider cursor-help">
+                <p className="text-xs text-slate-500 font-medium uppercase tracking-wide cursor-help">
                   Current ACWR Ratio
                 </p>
               </Tooltip>
               <div className="flex items-baseline gap-2 justify-center md:justify-start">
-                <h2 className="text-6xl font-black text-primary">
+                <h2 className="text-5xl font-black text-primary">
                   {acwrDisplay}
                 </h2>
                 {acwr !== null && (
@@ -188,8 +188,8 @@ export function DashboardClient({
       </section>
 
       {/* Two-Column Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-1 lg:sticky lg:top-[calc(4rem+1px+(--spacing(8))+200px)] lg:self-start">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="lg:col-span-1 lg:sticky lg:top-[calc(4rem+1px+var(--spacing-8)+180px)] lg:self-start">
           <WeeklyLoadChart
             weeklyLoadRanges={weeklyLoadRanges}
             activeWeekKey={activeWeekKey ?? undefined}
@@ -199,25 +199,32 @@ export function DashboardClient({
 
         <div className="lg:col-span-2 space-y-6">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-tight">
+            <h3 className="text-base font-semibold text-slate-900">
               Recent Sessions
             </h3>
           </div>
 
           {sessions.length === 0 ? (
             <div className="bg-white p-12 rounded-xl shadow-sm border border-slate-200 text-center">
-              <span className="material-symbols-outlined text-slate-300 text-5xl! mb-4 block">
+              <span className="material-symbols-outlined text-slate-200 text-6xl! mb-4 block">
                 fitness_center
               </span>
-              <p className="text-slate-500 font-medium">No sessions yet</p>
-              <p className="text-slate-400 text-sm mt-1">
-                Click &quot;Add Session&quot; to log your first workout
+              <p className="text-slate-700 font-semibold text-lg">No sessions yet</p>
+              <p className="text-slate-400 text-sm mt-1 mb-6">
+                Start tracking your training load by logging your first session.
               </p>
+              <button
+                onClick={handleOpenCreate}
+                className="inline-flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-lg font-semibold text-sm hover:bg-primary-hover transition-colors cursor-pointer focus-visible:focus-ring"
+              >
+                <span className="material-symbols-outlined text-lg!">add</span>
+                Add your first session
+              </button>
             </div>
           ) : (
             <div
               ref={sessionListRef}
-              className="overflow-y-auto max-h-[calc(100vh-16rem)] space-y-4 pr-1"
+              className="space-y-4 pb-24"
             >
               {weekGroups.map((group) => (
                 <div key={group.weekKey}>

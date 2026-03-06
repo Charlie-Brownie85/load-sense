@@ -99,7 +99,7 @@ export function SessionModal({
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 transition-colors p-1 cursor-pointer"
+            className="text-slate-400 hover:text-slate-600 transition-colors p-1 cursor-pointer focus-visible:focus-ring rounded-lg"
           >
             <span className="material-symbols-outlined">close</span>
           </button>
@@ -200,14 +200,14 @@ export function SessionModal({
         <div className="px-6 py-5 border-t border-slate-100 flex items-center justify-end gap-3 bg-slate-50/50">
           <button
             onClick={onClose}
-            className="px-5 h-11 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
+            className="px-5 h-11 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer focus-visible:focus-ring"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={saving || !date || !type || !duration}
-            className="px-6 h-11 rounded-lg text-sm font-bold text-white bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            className="px-6 h-11 rounded-lg text-sm font-bold text-white bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer focus-visible:focus-ring"
           >
             <span className="material-symbols-outlined text-[18px]">check</span>
             {saving ? 'Saving...' : 'Save Session'}

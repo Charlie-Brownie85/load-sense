@@ -1,6 +1,6 @@
 import type { SessionType } from '@/shared/types';
 import { computeSessionLoad } from '@/shared/lib/workload';
-import { TYPE_CONFIG, formatRelativeDate } from '../model';
+import { TYPE_CONFIG, formatRelativeDate, getRpeIntensityColor, formatAbsoluteDate } from '../model';
 
 interface SessionCardProps {
   id: number;
@@ -26,7 +26,7 @@ export function SessionCard({
 
   return (
     <div
-      className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center gap-4 group transition-all hover:border-primary/50 cursor-pointer"
+      className={`bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-l-4 ${getRpeIntensityColor(rpe)} flex items-center gap-4 group transition-all hover:border-primary/50 cursor-pointer`}
       onClick={() => onEdit(id)}
     >
       <div
@@ -42,7 +42,7 @@ export function SessionCard({
             {config.label}
           </h4>
           <span className="text-[10px] font-bold text-slate-400 uppercase">
-            {formatRelativeDate(date)}
+            {formatRelativeDate(date)} · {formatAbsoluteDate(date)}
           </span>
         </div>
         <div className="flex items-center gap-4 text-xs text-slate-500">
@@ -56,7 +56,7 @@ export function SessionCard({
             </span>
             RPE {rpe}/10
           </span>
-          <span className="px-1.5 py-0.5 rounded bg-slate-100 font-bold text-primary">
+          <span className="px-2 py-1 rounded-md bg-primary/10 font-bold text-primary text-xs">
             {load} Load
           </span>
         </div>
@@ -67,6 +67,7 @@ export function SessionCard({
             e.stopPropagation();
             onDelete(id);
           }}
+          aria-label={`Delete ${config.label} session from ${formatAbsoluteDate(date)}`}
           className="p-1.5 text-slate-400 hover:text-red-500 rounded hover:bg-slate-100 cursor-pointer"
         >
           <span className="material-symbols-outlined">delete</span>

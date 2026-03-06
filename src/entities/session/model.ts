@@ -35,3 +35,14 @@ export function formatRelativeDate(dateStr: string): string {
   if (diffDays < 7) return `${diffDays} days ago`;
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
+
+export function getRpeIntensityColor(rpe: number): string {
+  if (rpe <= 3) return 'border-l-emerald-400';
+  if (rpe <= 6) return 'border-l-amber-400';
+  return 'border-l-red-400';
+}
+
+export function formatAbsoluteDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
