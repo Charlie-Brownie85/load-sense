@@ -17,3 +17,19 @@ model Session {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model UserProfile {
+  id             Int      @id @default(autoincrement())
+  age            Int?
+  gender         String?
+  height         Float?
+  heightUnit     String   @default("cm")
+  heightInches   Int?
+  weight         Float?
+  weightUnit     String   @default("kg")
+  bodyFatPercent Float?
+  restingHr      Int?
+  avatarBase64   String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
