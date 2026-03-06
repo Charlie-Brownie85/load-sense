@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { SessionCard } from '../SessionCard';
 
 describe('SessionCard', () => {
@@ -44,5 +44,11 @@ describe('SessionCard', () => {
   it('displays session load correctly', () => {
     const { container } = render(<SessionCard {...defaultProps} />);
     expect(container.textContent).toContain('360 Load');
+  });
+
+  it('delete button has accessible aria-label', () => {
+    render(<SessionCard {...defaultProps} />);
+    const deleteBtn = screen.getByRole('button', { name: /delete/i });
+    expect(deleteBtn).toHaveAccessibleName(expect.stringContaining('Delete'));
   });
 });
