@@ -2,12 +2,19 @@
 
 @theme inline {
   --color-primary: #1152d4;
+  --color-primary-hover: #0e44b3;
+  --color-secondary: #0d9488;
   --color-background-light: #f6f6f8;
   --color-background-dark: #101622;
   --font-display: "Inter", sans-serif;
   --radius: 0.25rem;
   --radius-lg: 0.5rem;
   --radius-xl: 0.75rem;
+}
+
+@utility focus-ring {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 body {
