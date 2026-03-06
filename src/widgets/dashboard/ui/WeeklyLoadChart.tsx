@@ -130,6 +130,7 @@ export function WeeklyLoadChart({
           {weeklyLoadRanges.map((range, i) => {
             const weekKey = getISOWeekKey(range.startDate);
             const isDimmed = hoveredIndex !== null && hoveredIndex !== i;
+            const isHovered = hoveredIndex === i;
             const pct = (range.load / maxLoad) * 100;
 
             return (
@@ -151,7 +152,7 @@ export function WeeklyLoadChart({
                 <div className="flex-1 w-full flex items-end">
                   <div
                     data-bar
-                    className={`w-full rounded-t-sm transition-opacity duration-200 ${getBarColor(weekKey, i)} ${isDimmed ? 'opacity-30' : ''}`}
+                    className={`w-full rounded-t-sm transition-all duration-200 ${getBarColor(weekKey, i)} ${isDimmed ? 'opacity-30' : ''} ${isHovered ? 'brightness-110 scale-x-105' : ''}`}
                     style={{
                       height: `${pct}%`,
                       minHeight: range.load > 0 ? '4px' : '0',
