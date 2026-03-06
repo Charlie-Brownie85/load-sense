@@ -15,9 +15,10 @@ import type { SessionType } from '@/shared/types';
 const PAGE_SIZE = 20;
 
 export async function DashboardPage() {
-  const sessions = await prisma.session.findMany({
-    orderBy: [{ date: 'desc' }, { id: 'desc' }],
-  });
+  const [sessions, userProfile] = await Promise.all([
+    prisma.session.findMany({ orderBy: [{ date: 'desc' }, { id: 'desc' }] }),
+    prisma.userProfile.findFirst({ select: { avatarBase64: true } }),
+  ]);
 
   const now = new Date();
   const sessionInputs = sessions.map((s) => ({
@@ -54,7 +55,7 @@ export async function DashboardPage() {
 
   return (
     <>
-      <Navbar />
+      <Navbar avatarBase64={userProfile?.avatarBase64} />
       <DashboardClient
         sessions={firstPage}
         hasMore={hasMore}
