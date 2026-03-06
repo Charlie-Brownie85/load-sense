@@ -16,7 +16,7 @@ export function MetricCard({ label, value, subtitle, warning, tooltip }: MetricC
   );
 
   return (
-    <div className="p-4 bg-slate-50 rounded-lg border border-slate-100">
+    <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 transition-colors hover:border-primary/20">
       {tooltip ? (
         <Tooltip content={tooltip}>{labelElement}</Tooltip>
       ) : (
